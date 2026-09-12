@@ -1,4 +1,27 @@
-﻿static void ShowInput()
+﻿// https://epimient.github.io/Profundizaci-n_en_NET/#/clase-05/doc
+/*
+ * To do: 1. Clear screen 2. fix ShowMenu function, it should not do validations.
+*/
+
+List<object[]> products = new();
+
+do
+{
+    int opcion = ShowMenu();
+
+    switch (opcion)
+    {
+        case 1:
+
+            break;
+        default:
+
+            break;
+    }
+}
+while (true);
+
+static void ShowInput()
 {
     Console.Write("> ");
 }
@@ -37,20 +60,56 @@ static int ShowMenu()
 
     return opcion;
 }
-
-
-do
+static int ReadIntegrer(string message, int min, int max)
 {
-    int opcion = ShowMenu();
+    int value;
 
-    switch (opcion)
+    do
     {
-        case 1:
+        Console.WriteLine(message);
+        Console.WriteLine($"Rango permitdo: {min} - {max} ");
+        ShowInput();
 
+        if (!int.TryParse(Console.ReadLine(), out value))
+        {
+            ShowError("Ingrese solo numeros enteros.");
+        }
+        else if (value > max || value < min)
+        {
+            ShowError($"Ingrese un valor dentro del rango establecido ({min} - {max}).");
+        }
+        else
+        {
             break;
-        default:
-
-            break;
+        }
     }
+    while (true);
+
+    return value;
 }
-while (true);
+static decimal ReadDecimal(string message, decimal min)
+{
+    decimal value;
+    do
+    {
+        Console.WriteLine(message);
+        Console.WriteLine($"El valor no puede ser menor a {min}");
+        ShowInput();
+
+        if (!decimal.TryParse(Console.ReadLine(), out value))
+        {
+            ShowError("Ingrese solo numeros.");
+        }
+        else if (value < min)
+        {
+            ShowError($"El valor no fue mayor ni igual al establecido ({min})");
+        }
+        else
+        {
+            break;
+        }
+    }
+    while (true);
+
+    return value;
+}
