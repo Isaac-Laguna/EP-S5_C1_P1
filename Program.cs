@@ -1,6 +1,6 @@
 ﻿// https://epimient.github.io/Profundizaci-n_en_NET/#/clase-05/doc
 /*
- * To do: 1. Clear screen 2. fix ShowMenu function, it should not do validations. 3. Switch defautl missing.
+ * To do: 1. Clear screen 2. fix ShowMenu function, it should not do validations.
 */
 //products.Add(new object[] { "Test", 3m, 5 });
 
@@ -15,8 +15,16 @@ do
         case 1:
             RegisterProduct(products);
             Console.Clear();
+
+            break;
+        case 5:
+            Console.WriteLine("Gracias por usar este programa!");
+            Environment.Exit(0);
+
             break;
         default:
+            Console.Clear();
+            ShowError("Opcion no valida.");
 
             break;
     }
