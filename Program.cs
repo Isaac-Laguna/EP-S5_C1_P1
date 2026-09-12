@@ -45,7 +45,7 @@ do
 
     switch (opcion)
     {
-        case 0:
+        case 1:
 
             break;
         default:
