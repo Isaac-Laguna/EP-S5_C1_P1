@@ -13,7 +13,8 @@ do
     switch (opcion)
     {
         case 1:
-            
+            RegisterProduct(products);
+            Console.Clear();
             break;
         default:
 
@@ -117,15 +118,15 @@ static decimal ReadDecimal(string message, decimal min)
 static string ReadString(string message)
 {
     string? value;
-
-    Console.WriteLine(message);
-    ShowInput();
-
+    
     do
     {
+        Console.WriteLine(message);
+        ShowInput();
+
         value = Console.ReadLine();
 
-        if (string.IsNullOrEmpty(value))
+        if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
         {
             ShowError("Este campo no puede estar vacío.");
         }
@@ -140,7 +141,7 @@ static string ReadString(string message)
 }
 static bool IsNameValid(string name, List<object[]> list)//Validates the name of the product, it should not exist two products with the same name
 {
-    int i = 0;
+    int i;
 
     for (i = 0; i < list.Count; i++)
     {
@@ -151,4 +152,30 @@ static bool IsNameValid(string name, List<object[]> list)//Validates the name of
     }
 
     return true;
+}
+static void RegisterProduct(List<object[]> list)
+{
+    string name;
+    decimal price;
+    int quantity;
+
+    do
+    {
+        name = ReadString("Ingrese el nombre del producto.");
+
+        if (!IsNameValid(name, list))
+        {
+            ShowError("El nombre del producto ya existe en el inventario.");
+        }
+        else
+        {
+            break;
+        }
+    }
+    while (true);
+
+    price = ReadDecimal("Ingrese el precio del producto.", 0);
+    quantity = ReadIntegrer("Ingrese la cantidad de productos (cantidad disponible).", 1, 1000);
+
+    list.Add([ name, price, quantity ]);
 }
