@@ -2,8 +2,9 @@
 /*
  * To do: 1. Clear screen 2. fix ShowMenu function, it should not do validations.
 */
+//products.Add(new object[] { "Test", 3m, 5 });
 
-List<object[]> products = new();
+List<object[]> products = new(5);
 
 do
 {
@@ -12,7 +13,7 @@ do
     switch (opcion)
     {
         case 1:
-
+            
             break;
         default:
 
@@ -112,4 +113,42 @@ static decimal ReadDecimal(string message, decimal min)
     while (true);
 
     return value;
+}
+static string ReadString(string message)
+{
+    string? value;
+
+    Console.WriteLine(message);
+    ShowInput();
+
+    do
+    {
+        value = Console.ReadLine();
+
+        if (string.IsNullOrEmpty(value))
+        {
+            ShowError("Este campo no puede estar vacío.");
+        }
+        else
+        {
+            break;
+        }
+    }
+    while (true);
+
+    return value;
+}
+static bool IsNameValid(string name, List<object[]> list)//Validates the name of the product, it should not exist two products with the same name
+{
+    int i = 0;
+
+    for (i = 0; i < list.Count; i++)
+    {
+        if (list[i][0].ToString() == name)
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
