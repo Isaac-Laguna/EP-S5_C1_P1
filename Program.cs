@@ -26,6 +26,10 @@ do
             Console.Clear();
 
             break;
+        case 3:
+            RegisterSell(products);
+
+            break;
         case 5:
             Console.WriteLine("Gracias por usar este programa!");
             Environment.Exit(0);
@@ -109,6 +113,7 @@ static int ReadIntegrer(string message, int min, int max)
 static decimal ReadDecimal(string message, decimal min)
 {
     decimal value;
+
     do
     {
         Console.WriteLine(message);
@@ -196,7 +201,7 @@ static void RegisterProduct(List<object[]> list)
 
     list.Add([ name, price, quantity ]);
 }
-static void ShowInventory(List<object[]> list)
+static void ShowInventory(List<object[]> list, bool stopUser = true)
 {
     if (list.Count == 0)
     {
@@ -227,8 +232,11 @@ static void ShowInventory(List<object[]> list)
     }
 
     Console.WriteLine("=======================================================");
-
-    AskContinue();
+    
+    if (stopUser)
+    {
+        AskContinue();
+    }
 }
 static void AskContinue()
 {
@@ -236,4 +244,102 @@ static void AskContinue()
     ShowInput();
 
     Console.ReadKey();
+}
+static void RegisterSell(List<object[]> list)
+{
+    int product, quantity;
+    bool discount;
+    decimal total, ivaAmount, discountAmount, subtotal;
+
+    ShowInventory(list, false);
+
+    if (list.Count == 0)
+    {
+        return;
+    }
+
+    product = ReadIntegrer("Seleccione el ID del producto a vender.", 1, list.Count) - 1;
+    quantity = ReadIntegrer("Ingrese la cantidad a vender.", 1, Convert.ToInt32(list[product][2]));
+    discount = AskYesNo("Aplica descuento de cliente frecuente (10%)? (S/N).");
+    
+    decimal productPrice = Convert.ToDecimal(list[product][1]);
+    total = CalculateInvoice(productPrice, quantity, discount, out ivaAmount, out discountAmount, out subtotal);
+    list[product][1] = Convert.ToInt32(list[product][1]) - quantity;
+
+    string productName = Convert.ToString(list[product][0]) ?? "";
+    ShowInvoice(productName, quantity, subtotal, discountAmount, ivaAmount, total);
+}
+static char ReadChar(string message)
+{
+    while (true)
+    {
+        Console.WriteLine(message);
+        ShowInput();
+        string input = Console.ReadLine() ?? "";
+
+        if (input.Length == 1)
+        {
+            return input[0];
+        }
+
+        ShowError("Ingrese un solo carácter.");
+    }
+}
+static bool AskYesNo(string message)
+{
+    bool yes;
+
+    do
+    {
+        char response = ReadChar(message);
+
+        if (char.ToUpper(response) == 'S')
+        {
+            yes = true;
+            break;
+        }
+        else if (char.ToUpper(response) == 'S')
+        {
+            yes = false;
+            break;
+        }
+        else
+        {
+            ShowError("Debe responder S o N (Si o No).");
+        }
+    }
+    while (true);
+
+    return yes;
+}
+static decimal CalculateInvoice(decimal price, int quantity, bool discount, out decimal ivaAmount, out decimal discountAmount, out decimal subtotal)
+{
+    decimal relativeTotal = price * quantity;
+    subtotal = price * quantity;
+    discountAmount = 0;
+
+    if (discount)
+    {
+        discountAmount = relativeTotal * 0.1m;
+        relativeTotal *= 0.9m;
+    }
+
+    ivaAmount = relativeTotal * 0.19m;
+
+    return relativeTotal + ivaAmount;
+}
+static void ShowInvoice(string productName, int quantity, decimal subtotal, decimal discount, decimal iva, decimal total)
+{
+    Console.WriteLine("============================================");
+    Console.WriteLine("               Ticket de venta              ");
+    Console.WriteLine("============================================");
+    Console.WriteLine($"Producto:         {productName} (x{quantity})");
+    Console.WriteLine($"Subtotal:         {subtotal:C2}");
+    Console.WriteLine($"Descuento (10%):  -{discount:C2}");
+    Console.WriteLine($"IVA (19%):        {iva:C2}");
+    Console.WriteLine("--------------------------------------------");
+    Console.WriteLine($" Total a pagar:   {total:C2}");
+    Console.WriteLine("============================================");
+
+    AskContinue();
 }
