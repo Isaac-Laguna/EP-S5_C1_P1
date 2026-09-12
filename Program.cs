@@ -1,7 +1,6 @@
 ﻿// https://epimient.github.io/Profundizaci-n_en_NET/#/clase-05/doc
 /*
- * To do: 1. Clear screen 2. fix ShowMenu function, it should not do validations.
- * Could be useful: Console.WriteLine(price.ToString("C2"));
+ * To do: 2. fix ShowMenu function, it should not do validations.
 */
 
 List<object[]> products = new(5)
