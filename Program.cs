@@ -15,8 +15,16 @@ do
         case 1:
             RegisterProduct(products);
             Console.Clear();
+
+            break;
+        case 5:
+            Console.WriteLine("Gracias por usar este programa!");
+            Environment.Exit(0);
+
             break;
         default:
+            Console.Clear();
+            ShowError("Opcion no valida.");
 
             break;
     }
